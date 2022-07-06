@@ -10,11 +10,11 @@ import axios, { Axios } from "axios";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
-import Select from '@mui/material/Select';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import { FormGroup } from "@mui/material";
-import TextField from '@mui/material/TextField';
+import Select from "@mui/material/Select";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import { FormGroup, Typography } from "@mui/material";
+import TextField from "@mui/material/TextField";
 const style = {
   position: "absolute",
   top: "50%",
@@ -31,11 +31,17 @@ function Category(props) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [CategoryID,SetCategoryID] = useState('')
-  const [CategoryName,SetCategoryName]=useState('')
+  const [CategoryID, SetCategoryID] = useState("");
+  const [CategoryName, SetCategoryName] = useState("");
   const [CategoryList, setCategoryList] = useState([]);
-  const [age, setAge] = React.useState('');
 
+  const [Name, setName] = useState("");
+  const [Tel, setTel] = useState("");
+  const [Email, setEmail] = useState("");
+  const [Consent, setConsent] = useState("");
+  const [ProductID, setProductID] = useState("");
+  const [date, setDate] = useState(new Date().toLocaleDateString("en-US"));
+  const [age, setAge] = React.useState("");
   const handleChange = (event) => {
     setAge(event.target.value);
   };
@@ -51,44 +57,53 @@ function Category(props) {
 
   const postData = (e) => {
     e.preventDefault();
-    axios.post("http://localhost:4000/createCategory", {
-      CategoryID,
-      CategoryName
-    }).then((res) => console.log("post", res)).catch(err=> console.log(err));
+    axios
+      .post("http://localhost:4000/createForm", {
+        CategoryID,
+        CategoryName,
+        Name,
+        Tel,
+        Email,
+        Consent,
+        ProductID,
+        date
+      })
+      .then((res) => console.log("post", res))
+      .catch((err) => console.log(err));
   };
-  function Update(id){
-    console.log(id)
-    props.history.push("http://localhost:4000/updateCategory/"+id)  }
+  function Update(id) {
+    console.log(id);
+    props.history.push("http://localhost:4000/updateCategory/" + id);
+  }
   return (
     <React.Fragment>
       <div>
-      <Box>
-      <Button onClick={handleOpen} variant="contained">
-        เพิ่มข้อมูล
-      </Button>
-      <Button  variant="contained">
-        Export Excel
-      </Button>
-      <br></br>
-      ค้นหาข้อมูล <FormGroup>
-        <TextField label="ค้นหาเบอร์โทร" >ค้นหาเบอร์โทร</TextField>
-        <TextField label="ค้นหาอีเมลล์" >ค้นหาอีเมลล์</TextField>
-        <InputLabel label="ค้นหาสถานะ">ค้นหาสถานะ</InputLabel>
-  <Select
-    labelId="demo-simple-select-label"
-    id="demo-simple-select"
-    value={age}
-    label="Age"
-    onChange={handleChange}
-  >
-    <MenuItem value={10}>Ten</MenuItem>
-    <MenuItem value={20}>Twenty</MenuItem>
-    <MenuItem value={30}>Thirty</MenuItem>
-  </Select>
-      </FormGroup>
-      </Box>
+        <Box>
+          <Button onClick={handleOpen} variant="contained">
+            เพิ่มข้อมูล
+          </Button>
+          <Button variant="contained">Export Excel</Button>
+          <br></br>
+          ค้นหาข้อมูล{" "}
+          <FormGroup>
+            <TextField label="ค้นหาเบอร์โทร">ค้นหาเบอร์โทร</TextField>
+            <TextField label="ค้นหาอีเมลล์">ค้นหาอีเมลล์</TextField>
+            <InputLabel label="ค้นหาสถานะ">ค้นหาสถานะ</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={age}
+              label="Age"
+              onChange={handleChange}
+            >
+              <MenuItem value={10}>Ten</MenuItem>
+              <MenuItem value={20}>Twenty</MenuItem>
+              <MenuItem value={30}>Thirty</MenuItem>
+            </Select>
+          </FormGroup>
+        </Box>
       </div>
-  
+
       <Modal
         open={open}
         onClose={handleClose}
@@ -96,14 +111,59 @@ function Category(props) {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-         
-        
-        <FormGroup>
-        <label>CategoryID</label>
-          <TextField type="text" value={CategoryID} onChange={(e)=>SetCategoryID(e.target.value)}/>
-          <label>CategoryName</label>
-          <TextField type="text" value={CategoryName} onChange={(e)=>SetCategoryName(e.target.value)}/>
-          <button onClick={postData}>submit</button>
+          <FormGroup>
+            <label>ชื่อลูกค้า</label>
+            <TextField
+              type="text"
+              value={Name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <label>เบอร์โทร</label>
+            <TextField
+              type="text"
+              value={Tel}
+              onChange={(e) => setTel(e.target.value)}
+            />
+            <label>อีเมลล์</label>
+            <TextField
+              type="text"
+              value={Email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <label>หมายเหตุ</label>
+            <TextField
+              type="text"
+              value={Consent}
+              onChange={(e) => setConsent(e.target.value)}
+            />
+            <br></br>
+            <Typography>เพิ่มข้อมูลโครงการที่ลูกค้าสนใจ</Typography>
+            <br></br>
+            <label>ประเภทโครงการ</label>
+            <TextField
+              type="text"
+              value={CategoryID}
+              onChange={(e) => SetCategoryID(e.target.value)}
+            />
+            <label>รหัสโครงการ</label>
+            <TextField
+              type="text"
+              value={ProductID}
+              onChange={(e) => setProductID(e.target.value)}
+            />
+            <label>ชื่อโครงการ</label>
+            <TextField
+              type="text"
+              value={CategoryName}
+              onChange={(e) => SetCategoryName(e.target.value)}
+            />
+            <label>ราคา</label>
+            <TextField
+              type="text"
+              value={CategoryName}
+              onChange={(e) => SetCategoryName(e.target.value)}
+            />
+            <button onClick={postData}>submit</button>
           </FormGroup>
         </Box>
       </Modal>
@@ -130,8 +190,6 @@ function Category(props) {
               <TableCell>Remark</TableCell>
               <TableCell>Update</TableCell>
               <TableCell>Action</TableCell>
-              
-              
             </TableRow>
           </TableHead>
           <TableBody>
@@ -155,7 +213,9 @@ function Category(props) {
                 <TableCell>{row.Parking}</TableCell>
                 <TableCell>{row.Parking}</TableCell>
                 <TableCell>{row.Parking}</TableCell>
-                <TableCell><Button onClick={()=>Update(row.id)}>Edit</Button> Delete</TableCell>
+                <TableCell>
+                  <Button onClick={() => Update(row.id)}>Edit</Button> Delete
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
