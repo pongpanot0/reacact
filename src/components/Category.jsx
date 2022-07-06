@@ -39,7 +39,7 @@ function Category(props) {
   const [Tel, setTel] = useState("");
   const [Email, setEmail] = useState("");
   const [Consent, setConsent] = useState("");
-  const [ProductID, setProductID] = useState("");
+  const [ProductID, setProductID] = useState();
   const [date, setDate] = useState(new Date().toLocaleDateString("en-US"));
   const [age, setAge] = React.useState("");
   const handleChange = (event) => {
@@ -48,8 +48,9 @@ function Category(props) {
 
   useEffect(() => {
     axios
-      .get("http://localhost:4000/getProduct")
+      .get("http://localhost:4000/twoColectionJoin")
       .then((res) => {
+        console.log(res.data)
         setCategoryList(res.data);
       })
       .catch((err) => console.log(err));
@@ -141,19 +142,19 @@ function Category(props) {
             <br></br>
             <label>ประเภทโครงการ</label>
             <TextField
-              type="text"
+              type="number"
               value={CategoryID}
-              onChange={(e) => SetCategoryID(e.target.value)}
+              onChange={(e) => SetCategoryID(e.target.valueAsNumber)}
             />
             <label>รหัสโครงการ</label>
             <TextField
-              type="text"
+              type="number"
               value={ProductID}
-              onChange={(e) => setProductID(e.target.value)}
+              onChange={(e) => setProductID(e.target.valueAsNumber)}
             />
             <label>ชื่อโครงการ</label>
             <TextField
-              type="text"
+              type="number"
               value={CategoryName}
               onChange={(e) => SetCategoryName(e.target.value)}
             />
@@ -196,20 +197,20 @@ function Category(props) {
             {CategoryList.map((row) => (
               <TableRow key={row.CategoryID}>
                 <TableCell></TableCell>
-                <TableCell>{row.CompanyID}</TableCell>
-                <TableCell>{row.ProductID}</TableCell>
-                <TableCell>{row.ProductName}</TableCell>
-                <TableCell>{row.Adress}</TableCell>
-                <TableCell>{row.Price}</TableCell>
-                <TableCell>{row.sqm}</TableCell>
-                <TableCell>{row.bedroom}</TableCell>
-                <TableCell>{row.bathroom}</TableCell>
-                <TableCell>{row.Parking}</TableCell>
-                <TableCell>{row.Parking}</TableCell>
-                <TableCell>{row.Parking}</TableCell>
-                <TableCell>{row.Parking}</TableCell>
-                <TableCell>{row.Parking}</TableCell>
-                <TableCell>{row.Parking}</TableCell>
+                <TableCell>{row.det[0].CompanyID}</TableCell>
+                <TableCell>{row.det[0].ProductID}</TableCell>
+                <TableCell>{row.det[0].ProductName}</TableCell>
+                <TableCell>{row.det[0].Adress}</TableCell>
+                <TableCell>{row.det[0].Price}</TableCell>
+                <TableCell>{row.det[0].sqm}</TableCell>
+                <TableCell>{row.det[0].bedroom}</TableCell>
+                <TableCell>{row.det[0].bathroom}</TableCell>
+                <TableCell>{row.det[0].Parking}</TableCell>
+                <TableCell>{row.date}</TableCell>
+                <TableCell>{row.Name}</TableCell>
+                <TableCell>{row.Tel}</TableCell>
+                <TableCell>{row.Email}</TableCell>
+                <TableCell>{row.Consent}</TableCell>
                 <TableCell>{row.Parking}</TableCell>
                 <TableCell>{row.Parking}</TableCell>
                 <TableCell>{row.Parking}</TableCell>
