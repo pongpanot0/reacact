@@ -12,7 +12,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
+import {signInWithEmailAndPassword} from 'firebase/auth'
+import {auth} from './firebase-config'
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -29,6 +30,25 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function Login() {
+  const [loginEmail,setLoginEmail] = React.useState("")
+  const [user,setUser] = React.useState({})
+  const [Email,setEmail] = React.useState("")
+  const [Password,setPassword] = React.useState("")
+
+  const login = async () =>{
+    try{
+      const user = await signInWithEmailAndPassword(
+        auth,
+        Email,
+        Password
+      );
+      console.log(user)
+      window.location ='/home'
+    } catch (error){
+      console.log(error.message)
+    }
+
+  }
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -66,6 +86,9 @@ export default function Login() {
               name="email"
               autoComplete="email"
               autoFocus
+              onChange={(e)=>{
+                setEmail(e.target.value)
+              }}
             />
             <TextField
               margin="normal"
@@ -76,6 +99,9 @@ export default function Login() {
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={(e)=>{
+                setPassword(e.target.value)
+              }}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -86,6 +112,7 @@ export default function Login() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              onClick={login}
             >
               Sign In
             </Button>

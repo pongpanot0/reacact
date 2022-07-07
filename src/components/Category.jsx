@@ -9,7 +9,7 @@ import Paper from "@mui/material/Paper";
 import axios, { Axios } from "axios";
 import Box from "@mui/material/Box";
 
-import Card from '@mui/material/Card';
+import Card from "@mui/material/Card";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Select from "@mui/material/Select";
@@ -17,9 +17,9 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import { FormGroup, Typography } from "@mui/material";
 import TextField from "@mui/material/TextField";
-import FormControl from '@mui/material/FormControl';
-import { styled } from '@mui/material/styles';
-import Grid from '@mui/material/Grid';
+import FormControl from "@mui/material/FormControl";
+import { styled } from "@mui/material/styles";
+import Grid from "@mui/material/Grid";
 const style = {
   position: "absolute",
   top: "50%",
@@ -36,10 +36,11 @@ function Category(props) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [CategoryID, SetCategoryID] = useState("");
+  const [CategoryID, SetCategoryID] = useState();
   const [CategoryName, SetCategoryName] = useState("");
   const [CategoryList, setCategoryList] = useState([]);
-
+  const [PRoductList, setPRoductList] = useState([]);
+  const [Cate,setCateList]=useState([])
   const [Name, setName] = useState("");
   const [Tel, setTel] = useState("");
   const [Email, setEmail] = useState("");
@@ -55,15 +56,37 @@ function Category(props) {
   const handleChange = (event) => {
     setAge(event.target.value);
   };
+  const handleProduct = (event) => {
+    setProductID(event.target.value);
+  };
+  const handleCategoryID = (event) => {
+    SetCategoryID(event.target.value);
+  };
+
   const handleChange2 = (event) => {
     setStatus(event.target.value);
   };
   useEffect(() => {
     axios
-      .get("http://localhost:4000/twoColectionJoin")
+      .get("https://whispering-everglades-42366.herokuapp.com/twoColectionJoin")
       .then((res) => {
-        console.log(res.data)
+        console.log(res.data);
         setCategoryList(res.data);
+      })
+      .catch((err) => console.log(err));
+    axios
+      .get("https://whispering-everglades-42366.herokuapp.com/getProduct")
+      .then((res) => {
+        console.log(res.data);
+        setPRoductList(res.data);
+      })
+      .catch((err) => console.log(err));
+      
+      axios
+      .get("https://whispering-everglades-42366.herokuapp.com/getCategory")
+      .then((res) => {
+        console.log(res.data);
+        setCateList(res.data);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -84,7 +107,7 @@ function Category(props) {
   const postData = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:4000/createForm", {
+      .post("https://whispering-everglades-42366.herokuapp.com/createForm", {
         CategoryID,
         CategoryName,
         Name,
@@ -94,17 +117,42 @@ function Category(props) {
         ProductID,
         date,
         Status,
-Remark
+        Remark,
       })
-      .then((res) => console.log("post", res))
+      .then((res) => window.location.reload())
       .catch((err) => console.log(err));
   };
-  function Update(id) {
-    console.log(id);
-    props.history.push("http://localhost:4000/updateCategory/" + id);
-  }
- 
+  const getExcel = (e) => {
+    e.preventDefault();
+    axios
+      .post("https://whispering-everglades-42366.herokuapp.com/csv",{
+        responseType: "blob" // important
+      }).then(response => {
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute(
+              "download",
+              `${this.props.file.name}.${this.props.file.mime}`
+          );
+          document.body.appendChild(link);
+          link.click();
   
+          // Clean up and remove the link
+          link.parentNode.removeChild(link);
+      })
+  
+  };
+  function Update(id) {
+    window.location = "/edit/" + id;
+  }
+  const DeleteData = (id) => {
+    axios
+      .delete("http://localhost:4000/deleteForm/" + id)
+      .then((res) => window.location.reload())
+      .catch((err) => console.log(err));
+  };
+
   return (
     <React.Fragment>
       <div>
@@ -112,7 +160,9 @@ Remark
           <Button onClick={handleOpen} variant="contained">
             เพิ่มข้อมูล
           </Button>
-          <Button variant="contained">Export Excel</Button>
+          <Button variant="contained" onClick={getExcel}>
+            Export Excel
+          </Button>
           <br></br>
           ค้นหาข้อมูล{" "}
           <FormGroup>
@@ -146,85 +196,91 @@ Remark
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
- 
-          <Typography  sx={{textAlign:"center" }} variant="body1" gutterBottom>เพิ่มข้อมูลโครงการที่ลูกค้าสนใจ</Typography>
+          <Typography sx={{ textAlign: "center" }} variant="body1" gutterBottom>
+            เพิ่มข้อมูลโครงการที่ลูกค้าสนใจ
+          </Typography>
           <FormControl>
-          <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-        <Grid item xs={6}>
-        
-            <label>ชื่อลูกค้า</label>
-            <TextField
-              type="text"
-              value={Name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <label>เบอร์โทร</label>
-            <TextField
-              type="text"
-              value={Tel}
-              onChange={(e) => setTel(e.target.value)}
-            />
-            <label>อีเมลล์</label>
-            <TextField
-              type="text"
-              value={Email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <label>หมายเหตุ</label>
-            <TextField
-              type="text"
-              value={Consent}
-              onChange={(e) => setConsent(e.target.value)}
-            />
-        </Grid>
-        <Grid item xs={6}>
-        
-            <label>ประเภทโครงการ</label>
-            <TextField
-              type="number"
-              value={CategoryID}
-              onChange={(e) => SetCategoryID(e.target.valueAsNumber)}
-            />
-            <label>รหัสโครงการ</label>
-            <TextField
-              type="number"
-              value={ProductID}
-              onChange={(e) => setProductID(e.target.valueAsNumber)}
-            />
-            <label>ชื่อโครงการ</label>
-            <TextField
-              type="number"
-              value={CategoryName}
-              onChange={(e) => SetCategoryName(e.target.value)}
-            />
-            <label>ราคา</label>
-            <TextField
-              type="text"
-              value={CategoryName}
-              onChange={(e) => SetCategoryName(e.target.value)}
-            />
-           
-            
-            
-        </Grid>
-        </Grid>
-        <label>Remark</label>
+            <Grid
+              container
+              rowSpacing={1}
+              columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+            >
+              <Grid item xs={6}>
+                <label>ชื่อลูกค้า</label>
+                <TextField
+                  type="text"
+                  value={Name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+                <label>เบอร์โทร</label>
+                <TextField
+                  type="text"
+                  value={Tel}
+                  onChange={(e) => setTel(e.target.value)}
+                />
+                <label>อีเมลล์</label>
+                <TextField
+                  type="text"
+                  value={Email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <label>หมายเหตุ</label>
+                <TextField
+                  type="text"
+                  value={Consent}
+                  onChange={(e) => setConsent(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={6}>
+              <label>Remark</label>
             <TextField
               type="text"
               value={Remark}
               onChange={(e) => setRemark(e.target.value)}
-            >
-              
-            </TextField>
-        <FormControl>
-            
+            ></TextField>
+              </Grid>
+            </Grid>
+                           
+            <FormControl>
+                <InputLabel id="demo-simple-select-1">ประเภทโครงการ</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={CategoryID}
+                    label="CategoryID"
+                    onChange={handleCategoryID}
+                  >
+                    {Cate.map((row) => (
+                      <MenuItem value={row.CategoryID}>
+                        {row.CategoryName}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+      
+            <FormControl>
+            <InputLabel id="demo-simple-select-1">รหัสโครงการ</InputLabel>
+                  <Select 
+                    labelId="demo-simple-select-1"
+                    id="demo-simple-1"
+                    value={ProductID}
+                    label="ProductID"
 
+                    onChange={handleProduct}
+                  >
+                    {PRoductList.map((row) => (
+                      <MenuItem value={row.ProductID}>
+                        {row.ProductName}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  </FormControl>
+                  <FormControl>
               <InputLabel id="demo-simple-select-label">สถานะงาน</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={Status}
-                
                 label="สถานะงาน"
                 onChange={handleChange2}
               >
@@ -232,11 +288,15 @@ Remark
                 <MenuItem value={"Pending"}>Pending</MenuItem>
                 <MenuItem value={"Reject"}>Reject</MenuItem>
               </Select>
-              </FormControl>
-        <Button variant="contained"  onClick={postData}>submit</Button>
-        </FormControl>
-      
-      
+              
+            </FormControl>
+            <Button variant="contained" onClick={postData}>
+              submit
+            </Button>
+          </FormControl>
+       
+                
+              
         </Box>
       </Modal>
       <TableContainer component={Paper}>
@@ -284,9 +344,10 @@ Remark
                 <TableCell>{row.Consent}</TableCell>
                 <TableCell>{row.Status}</TableCell>
                 <TableCell>{row.Remark}</TableCell>
-                <TableCell>{row.Update}</TableCell>
+                <TableCell>{row.update}</TableCell>
                 <TableCell>
-                  <Button onClick={() => Update(row.id)}>Edit</Button> Delete
+                  <Button onClick={() => Update(row.id)}>Edit</Button>
+                  <Button onClick={() => DeleteData(row.id)}>Delete</Button>
                 </TableCell>
               </TableRow>
             ))}

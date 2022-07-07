@@ -8,7 +8,7 @@ export default function Update() {
   useEffect(() => {
     const id = props.match.params.id
     axios
-      .get("http://localhost:4000/getCategory")
+      .get("https://whispering-everglades-42366.herokuapp.com/getCategory")
       .then((res) => {
         setCategoryList(res.data);
       })
@@ -17,7 +17,7 @@ export default function Update() {
   const postData = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:4000/createCategory", {
+      .post("https://whispering-everglades-42366.herokuapp.com/createCategory", {
         CategoryID,
         CategoryName,
       })
@@ -26,7 +26,7 @@ export default function Update() {
   };
   function Update(id) {
     console.log(id);
-    props.history.push("http://localhost:4000/updateCategory/" + id);
+    props.history.push("https://whispering-everglades-42366.herokuapp.com/updateCategory/" + id);
   }
   return (        
   <FormGroup>
