@@ -14,18 +14,8 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {signInWithEmailAndPassword} from 'firebase/auth'
 import {auth} from './firebase-config'
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import logo from '../ICON.png'
+
 
 const theme = createTheme();
 
@@ -70,9 +60,9 @@ export default function Login() {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
+      
+           <img src={logo} alt="" />
+ 
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
@@ -103,10 +93,7 @@ export default function Login() {
                 setPassword(e.target.value)
               }}
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
+    
             <Button
               type="submit"
               fullWidth
@@ -119,7 +106,7 @@ export default function Login() {
        
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
+      
       </Container>
     </ThemeProvider>
   );

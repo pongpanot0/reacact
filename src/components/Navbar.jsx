@@ -4,12 +4,11 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import Category from "./Category";
-import { Button } from "@mui/material";
+import Sidebar from "./sidebar";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
-  padding: theme.spacing(1),
   textAlign: "center",
   color: theme.palette.text.secondary,
 
@@ -39,15 +38,12 @@ export default function Navbar() {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }} style={{ background: "#13499f", color: "white"  }}>
+    <Box sx={{ flexGrow: 1 }} >
       <Grid container spacing={2}>
         <Grid item xs={2} >
           <Item style={{ background: "#13499f", color: "white" }}>
-            <Button style={{ color: "#13499" ,width:'100%',background:"white"}}>แสดงข้อมูล</Button>
-            <br></br>
-            <br></br>
-            <Button style={{ color: "#13499",width:'100%',background:"white" }}>ออกจากระบบ</Button>
-
+       
+<Sidebar/>
           </Item>
         </Grid>
         <Grid item xs={10}>

@@ -20,6 +20,7 @@ import TextField from "@mui/material/TextField";
 import FormControl from "@mui/material/FormControl";
 import { styled } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
+import fs from 'fs'
 const style = {
   position: "absolute",
   top: "50%",
@@ -40,7 +41,7 @@ function Category(props) {
   const [CategoryName, SetCategoryName] = useState("");
   const [CategoryList, setCategoryList] = useState([]);
   const [PRoductList, setPRoductList] = useState([]);
-  const [Cate,setCateList]=useState([])
+  const [Cate, setCateList] = useState([]);
   const [Name, setName] = useState("");
   const [Tel, setTel] = useState("");
   const [Email, setEmail] = useState("");
@@ -81,8 +82,8 @@ function Category(props) {
         setPRoductList(res.data);
       })
       .catch((err) => console.log(err));
-      
-      axios
+
+    axios
       .get("https://whispering-everglades-42366.herokuapp.com/getCategory")
       .then((res) => {
         console.log(res.data);
@@ -124,31 +125,27 @@ function Category(props) {
   };
   const getExcel = (e) => {
     e.preventDefault();
-    axios
-      .post("https://whispering-everglades-42366.herokuapp.com/csv",{
-        responseType: "blob" // important
-      }).then(response => {
-          const url = window.URL.createObjectURL(new Blob([response.data]));
-          const link = document.createElement("a");
-          link.href = url;
-          link.setAttribute(
-              "download",
-              `${this.props.file.name}.${this.props.file.mime}`
-          );
-          document.body.appendChild(link);
-          link.click();
-  
-          // Clean up and remove the link
-          link.parentNode.removeChild(link);
-      })
+      axios({
+        url: 'https://localhost:4000/csv', //your url
+        method: 'GET',
+        responseType: 'blob', // important
+    }).then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'file.pdf'); //or any other extension
+        document.body.appendChild(link);
+        link.click();
+    });
   
   };
+  console.log(getExcel);
   function Update(id) {
     window.location = "/edit/" + id;
   }
   const DeleteData = (id) => {
     axios
-      .delete("http://localhost:4000/deleteForm/" + id)
+      .delete("https://whispering-everglades-42366.herokuapp.com/" + id)
       .then((res) => window.location.reload())
       .catch((err) => console.log(err));
   };
@@ -232,51 +229,47 @@ function Category(props) {
                 />
               </Grid>
               <Grid item xs={6}>
-              <label>Remark</label>
-            <TextField
-              type="text"
-              value={Remark}
-              onChange={(e) => setRemark(e.target.value)}
-            ></TextField>
+                <label>Remark</label>
+                <TextField
+                  type="text"
+                  value={Remark}
+                  onChange={(e) => setRemark(e.target.value)}
+                ></TextField>
               </Grid>
             </Grid>
-                           
-            <FormControl>
-                <InputLabel id="demo-simple-select-1">ประเภทโครงการ</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={CategoryID}
-                    label="CategoryID"
-                    onChange={handleCategoryID}
-                  >
-                    {Cate.map((row) => (
-                      <MenuItem value={row.CategoryID}>
-                        {row.CategoryName}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-      
-            <FormControl>
-            <InputLabel id="demo-simple-select-1">รหัสโครงการ</InputLabel>
-                  <Select 
-                    labelId="demo-simple-select-1"
-                    id="demo-simple-1"
-                    value={ProductID}
-                    label="ProductID"
 
-                    onChange={handleProduct}
-                  >
-                    {PRoductList.map((row) => (
-                      <MenuItem value={row.ProductID}>
-                        {row.ProductName}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  </FormControl>
-                  <FormControl>
+            <FormControl>
+              <InputLabel id="demo-simple-select-1">ประเภทโครงการ</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={CategoryID}
+                label="CategoryID"
+                onChange={handleCategoryID}
+              >
+                {Cate.map((row) => (
+                  <MenuItem value={row.CategoryID}>{row.CategoryName}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            <FormControl>
+              <InputLabel id="demo-simple-select-1">รหัสโครงการ</InputLabel>
+              <Select
+                labelId="demo-simple-select-1"
+                id="demo-simple-1"
+                value={ProductID}
+                label="ProductID"
+                onChange={handleProduct}
+              >
+                {PRoductList.map((row) => (
+                  <MenuItem value={row.ProductID}>{row.ProductName}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl>
               <InputLabel id="demo-simple-select-label">สถานะงาน</InputLabel>
+
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -284,19 +277,23 @@ function Category(props) {
                 label="สถานะงาน"
                 onChange={handleChange2}
               >
-                <MenuItem value={"Success"}>Success</MenuItem>
-                <MenuItem value={"Pending"}>Pending</MenuItem>
-                <MenuItem value={"Reject"}>Reject</MenuItem>
+                <MenuItem autoFocus value={"สนใจ"}>
+                  สนใจ
+                </MenuItem>
+                <MenuItem value={"รอติดต่อลูกค้า"}>รอติดต่อลูกค้า</MenuItem>
+                <MenuItem value={"อยู่ระหว่างดำเนินการ"}>
+                  อยู่ระหว่างดำเนินการ
+                </MenuItem>
+                <MenuItem value={"รอผลพิจารณา"}>รอผลพิจารณา</MenuItem>
+                <MenuItem value={"สำเร็จ"}>สำเร็จ</MenuItem>
+                <MenuItem value={"ลูกค้ายกเลิก"}>ลูกค้ายกเลิก</MenuItem>
+                <MenuItem value={"ปฏิเสธลูกค้า"}>ปฏิเสธลูกค้า</MenuItem>
               </Select>
-              
             </FormControl>
             <Button variant="contained" onClick={postData}>
               submit
             </Button>
           </FormControl>
-       
-                
-              
         </Box>
       </Modal>
       <TableContainer component={Paper}>
