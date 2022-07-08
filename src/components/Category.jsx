@@ -20,7 +20,7 @@ import TextField from "@mui/material/TextField";
 import FormControl from "@mui/material/FormControl";
 import { styled } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
-import fs from 'fs'
+import fs from "fs";
 const style = {
   position: "absolute",
   top: "50%",
@@ -48,14 +48,13 @@ function Category(props) {
   const [Consent, setConsent] = useState("");
   const [ProductID, setProductID] = useState();
   const [date, setDate] = useState(new Date().toLocaleDateString("en-US"));
-  const [age, setAge] = React.useState("");
-  const [searchInput, setSearchInput] = useState("");
-  const [filteredResults, setFilteredResults] = useState([]);
   const [Status, setStatus] = useState("");
   const [Remark, setRemark] = useState("");
-
+  const [searchedVal, setSearchedVal] = useState("");
+  const [searchedVal2, setSearchedVal2] = useState("");
+  const [searchedVal3, setSearchedVal3] = useState("");
   const handleChange = (event) => {
-    setAge(event.target.value);
+    setSearchedVal3(event.target.value);
   };
   const handleProduct = (event) => {
     setProductID(event.target.value);
@@ -67,6 +66,7 @@ function Category(props) {
   const handleChange2 = (event) => {
     setStatus(event.target.value);
   };
+
   useEffect(() => {
     axios
       .get("https://whispering-everglades-42366.herokuapp.com/twoColectionJoin")
@@ -91,20 +91,6 @@ function Category(props) {
       })
       .catch((err) => console.log(err));
   }, []);
-  const searchItems = (searchValue) => {
-    setSearchInput(searchValue);
-    if (searchInput !== "") {
-      const filteredData = CategoryList.filter((item) => {
-        return Object.values(item)
-          .join("")
-          .toLowerCase()
-          .includes(searchInput.toLowerCase());
-      });
-      setFilteredResults(filteredData);
-    } else {
-      setFilteredResults(CategoryList);
-    }
-  };
   const postData = (e) => {
     e.preventDefault();
     axios
@@ -125,34 +111,35 @@ function Category(props) {
   };
   const getExcel = (e) => {
     e.preventDefault();
-      axios({
-        url: 'https://localhost:4000/csv', //your url
-        method: 'GET',
-        responseType: 'blob', // important
+    axios({
+      url: "https://whispering-everglades-42366.herokuapp.com/csv", //your url
+      method: "GET",
+      responseType: "blob", // important
     }).then((response) => {
-        const url = window.URL.createObjectURL(new Blob([response]));
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'file.pdf'); //or any other extension
-        document.body.appendChild(link);
-        link.click();
+      console.log(response);
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "file.xlsx"); //or any other extension
+      document.body.appendChild(link);
+      link.click();
     });
-  
   };
-  console.log(getExcel);
   function Update(id) {
     window.location = "/edit/" + id;
   }
   const DeleteData = (id) => {
     axios
-      .delete("https://whispering-everglades-42366.herokuapp.com/" + id)
+      .delete(
+        "https://whispering-everglades-42366.herokuapp.com/deleteForm/" + id
+      )
       .then((res) => window.location.reload())
       .catch((err) => console.log(err));
   };
 
   return (
     <React.Fragment>
-      <div>
+      <div>   <br></br>
         <Box>
           <Button onClick={handleOpen} variant="contained">
             เพิ่มข้อมูล
@@ -161,29 +148,44 @@ function Category(props) {
             Export Excel
           </Button>
           <br></br>
-          ค้นหาข้อมูล{" "}
+          <br></br>
           <FormGroup>
             <TextField
-              label="ค้นหาเบอร์โทร"
-              onChange={(e) => searchItems(e.target.value)}
-            >
-              ค้นหาเบอร์โทร
-            </TextField>
-            <TextField label="ค้นหาอีเมลล์">ค้นหาอีเมลล์</TextField>
-            <InputLabel label="ค้นหาสถานะ">ค้นหาสถานะ</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={age}
-              label="Age"
-              onChange={handleChange}
-            >
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
-            </Select>
+              label="ค้นหาด้วยชื่อ"
+              onChange={(e) => setSearchedVal(e.target.value)}
+            />
+               <br></br>
+            <TextField
+              label="ค้นหาอีเมลล์"
+              onChange={(e) => setSearchedVal2(e.target.value)}
+            />
+    <br></br>
+            <FormControl>
+              <InputLabel id="demo-simple-select-label">สถานะงาน</InputLabel>
+
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={searchedVal3}
+                label="สถานะงาน"
+                onChange={handleChange}
+              >
+                <MenuItem autoFocus value={"สนใจ"}>
+                  สนใจ
+                </MenuItem>
+                <MenuItem value={"รอติดต่อลูกค้า"}>รอติดต่อลูกค้า</MenuItem>
+                <MenuItem value={"อยู่ระหว่างดำเนินการ"}>
+                  อยู่ระหว่างดำเนินการ
+                </MenuItem>
+                <MenuItem value={"รอผลพิจารณา"}>รอผลพิจารณา</MenuItem>
+                <MenuItem value={"สำเร็จ"}>สำเร็จ</MenuItem>
+                <MenuItem value={"ลูกค้ายกเลิก"}>ลูกค้ายกเลิก</MenuItem>
+                <MenuItem value={"ปฏิเสธลูกค้า"}>ปฏิเสธลูกค้า</MenuItem>
+              </Select>
+            </FormControl>
           </FormGroup>
         </Box>
+        <br></br>
       </div>
 
       <Modal
@@ -321,33 +323,57 @@ function Category(props) {
               <TableCell>Action</TableCell>
             </TableRow>
           </TableHead>
+
           <TableBody>
-            {CategoryList.map((row) => (
-              <TableRow key={row.CategoryID}>
-                <TableCell></TableCell>
-                <TableCell>{row.det[0].CompanyID}</TableCell>
-                <TableCell>{row.det[0].ProductID}</TableCell>
-                <TableCell>{row.det[0].ProductName}</TableCell>
-                <TableCell>{row.det[0].Adress}</TableCell>
-                <TableCell>{row.det[0].Price}</TableCell>
-                <TableCell>{row.det[0].sqm}</TableCell>
-                <TableCell>{row.det[0].bedroom}</TableCell>
-                <TableCell>{row.det[0].bathroom}</TableCell>
-                <TableCell>{row.det[0].Parking}</TableCell>
-                <TableCell>{row.date}</TableCell>
-                <TableCell>{row.Name}</TableCell>
-                <TableCell>{row.Tel}</TableCell>
-                <TableCell>{row.Email}</TableCell>
-                <TableCell>{row.Consent}</TableCell>
-                <TableCell>{row.Status}</TableCell>
-                <TableCell>{row.Remark}</TableCell>
-                <TableCell>{row.update}</TableCell>
-                <TableCell>
-                  <Button onClick={() => Update(row.id)}>Edit</Button>
-                  <Button onClick={() => DeleteData(row.id)}>Delete</Button>
-                </TableCell>
-              </TableRow>
-            ))}
+            {CategoryList.filter(
+              (row) =>
+                // note that I've incorporated the searchedVal length check here
+                !searchedVal.length ||
+                row.Name.toString()
+                  .toLowerCase()
+                  .includes(searchedVal.toString().toLowerCase())
+            ).filter(
+              (row) =>
+                // note that I've incorporated the searchedVal length check here
+                !searchedVal2.length ||row.Email.toString()
+                  .toLowerCase()
+                  .includes(searchedVal2.toString().toLowerCase())
+                  ).
+                  filter(
+                    (row) =>
+                      // note that I've incorporated the searchedVal length check here
+                      !searchedVal3.length ||row.Status.toString()
+                        .toLowerCase()
+                        .includes(searchedVal3.toString().toLowerCase())
+                        ).map((row) => (
+                    <TableRow key={row.CategoryID}>
+                      <TableCell></TableCell>
+                      <TableCell>{row.det[0].CompanyID}</TableCell>
+                      <TableCell>{row.det[0].ProductID}</TableCell>
+                      <TableCell>{row.det[0].ProductName}</TableCell>
+                      <TableCell>{row.det[0].Adress}</TableCell>
+                      <TableCell>{row.det[0].Price}</TableCell>
+                      <TableCell>{row.det[0].sqm}</TableCell>
+                      <TableCell>{row.det[0].bedroom}</TableCell>
+                      <TableCell>{row.det[0].bathroom}</TableCell>
+                      <TableCell>{row.det[0].Parking}</TableCell>
+                      <TableCell>{row.date}</TableCell>
+                      <TableCell>{row.Name}</TableCell>
+                      <TableCell>{row.Tel}</TableCell>
+                      <TableCell>{row.Email}</TableCell>
+                      <TableCell>{row.Consent}</TableCell>
+                      <TableCell>{row.Status}</TableCell>
+                      <TableCell>{row.Remark}</TableCell>
+                      <TableCell>{row.update}</TableCell>
+                      <TableCell>
+                        <Button onClick={() => Update(row.id)}>Edit</Button>
+                        <Button onClick={() => DeleteData(row.id)}>
+                          Delete
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  )
+            )}
           </TableBody>
         </Table>
       </TableContainer>

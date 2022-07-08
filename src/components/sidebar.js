@@ -6,7 +6,9 @@ import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 export default props => {
-    const Home = (e) => {
+  
+      const logout = () => {
+        localStorage.removeItem('token');
         window.location ='/'
       };
 const Item = styled(Box)(({ theme }) => ({
@@ -25,7 +27,7 @@ const Item = styled(Box)(({ theme }) => ({
             <Button style={{ color: "white" ,width:'100%'}}>แสดงข้อมูล</Button>
             <br></br>
             <br></br>
-            <Button style={{ color: "white",width:'100%'}} onClick={Home}>ออกจากระบบ</Button>
+            <Button style={{ color: "white",width:'100%'}} onClick={logout}>ออกจากระบบ</Button>
        </Item>
        
     </Menu>

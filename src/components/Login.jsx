@@ -32,8 +32,9 @@ export default function Login() {
         Email,
         Password
       );
-      console.log(user)
+      console.log(user.user)
       window.location ='/home'
+    localStorage.setItem('token',user.user.accessToken)
     } catch (error){
       console.log(error.message)
     }
