@@ -32,11 +32,12 @@ export default function Login() {
         Email,
         Password
       );
-      console.log(user.user)
+      console.log(user)
       window.location ='/home'
-    localStorage.setItem('token',user.user.accessToken)
+      localStorage.setItem('token',user.user.accessToken) 
     } catch (error){
       console.log(error.message)
+      
     }
 
   }
@@ -65,7 +66,7 @@ export default function Login() {
            <img src={logo} alt="" />
  
           <Typography component="h1" variant="h5">
-            Sign in
+            ระบบจัดการข้อมูล
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
@@ -102,7 +103,7 @@ export default function Login() {
               sx={{ mt: 3, mb: 2 }}
               onClick={login}
             >
-              Sign In
+              เข้าสู่ระบบ
             </Button>
        
           </Box>
