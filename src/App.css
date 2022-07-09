@@ -1,17 +1,3 @@
-html,
-body {
-  margin: 0;
-}
-
-#App {
-  font-family: sans-serif;
-  height: 100vh;
-}
-
-#page-wrap {
-  text-align: center;
-  overflow: auto;
-}
 
 .bm-item {
   display: inline-block;
@@ -62,4 +48,7 @@ body {
 
 .bm-overlay {
   background: #867A3C
+}
+.bm{
+  background: #FFFDD0;
 }

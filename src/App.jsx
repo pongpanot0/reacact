@@ -8,7 +8,7 @@ import Sidebar from "./components/sidebar";
 
 function App() {
   return (
-    <div className="App">
+    <div>
        <Routes>
         <Route exact path="/" element={<Login />} />
       </Routes>

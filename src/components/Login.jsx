@@ -15,7 +15,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {signInWithEmailAndPassword} from 'firebase/auth'
 import {auth} from './firebase-config'
 import logo from '../ICON.png'
-
+import './login.css'
 
 const theme = createTheme();
 
@@ -51,15 +51,16 @@ export default function Login() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
+    <div style={{backgroundColor:'#FFFDD0',height:'100%'}}>
+  
+      <Container component="main"  style={{backgroundColor:'#FFFDD0',height:1000}}>
+        <CssBaseline  style={{backgroundColor:'#FFFDD0'}} />
         <Box
           sx={{
-            marginTop: 8,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            backgroundColor:'#FFFDD0'
           }}
         >
       
@@ -68,7 +69,7 @@ export default function Login() {
           <Typography component="h1" variant="h5">
             ระบบจัดการข้อมูล
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Box  style={{backgroundColor:'#FFFDD0'}} component="form" onSubmit={handleSubmit} noValidate >
             <TextField
               margin="normal"
               required
@@ -114,6 +115,7 @@ export default function Login() {
         </Box>
       
       </Container>
-    </ThemeProvider>
+  
+    </div>
   );
 }

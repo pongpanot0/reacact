@@ -97,7 +97,6 @@ function Category(props) {
       .catch((err) => console.log(err));
   }, []);
   const postData = (e) => {
-    e.preventDefault();
     axios
       .post("https://whispering-everglades-42366.herokuapp.com/createForm", {
         CategoryID,
@@ -138,6 +137,11 @@ function Category(props) {
   function Update(id) {
     window.location = "/edit/" + id;
   }
+  const click = (e) =>{
+    formRef.current.reportValidity()
+    postData()
+
+  }
   const DeleteData = (id) => {
     axios
       .delete(
@@ -149,6 +153,9 @@ function Category(props) {
 
   return (
     <React.Fragment>
+      <br></br>
+      <br></br>
+
       <div>
         {" "}
         <br></br>
@@ -250,7 +257,7 @@ function Category(props) {
                 />
               </Grid>
               <Grid item xs={6}>
-                <label>Remark</label>
+                <label>หมายเหตุ</label>
                 <TextField
                   type="text"
                   
@@ -289,7 +296,7 @@ function Category(props) {
             </FormControl>
             <br></br>
             <FormControl>
-              <InputLabel id="demo-simple-select-1">รหัสโครงการ</InputLabel>
+              <InputLabel id="demo-simple-select-1">ชื่อโครงการ</InputLabel>
               <Select
                 labelId="demo-simple-select-1"
                 id="demo-simple-1"
@@ -315,7 +322,10 @@ function Category(props) {
                 label="สถานะงาน"
                 onChange={handleChange2}
               >
-                <MenuItem autoFocus value={"สนใจ"}>
+                <MenuItem autoFocus value={"ทั้งหมด"}>
+                ทั้งหมด
+                </MenuItem>
+                <MenuItem  value={"สนใจ"}>
                   สนใจ
                 </MenuItem>
                 <MenuItem value={"รอติดต่อลูกค้า"}>รอติดต่อลูกค้า</MenuItem>
@@ -339,8 +349,8 @@ function Category(props) {
             <br></br>
             <Button
               variant="contained"
-              onClick={postData}
-              onClick={() => formRef.current.reportValidity()}
+              onClick={click}
+             
               style={{ backgroundColor: "#867A3C" }}
             >
               เพิ่มข้อมูล
@@ -370,7 +380,7 @@ function Category(props) {
               <TableCell>Email</TableCell>
               <TableCell>Consent</TableCell>
               <TableCell>Status</TableCell>
-              <TableCell>Remark</TableCell>
+              <TableCell>หมายเหตุ</TableCell>
               <TableCell>Update</TableCell>
               <TableCell>Action</TableCell>
             </TableRow>
