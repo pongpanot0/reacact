@@ -99,7 +99,7 @@ function Category(props) {
   const postData = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:4000/createForm", {
+      .post("https://whispering-everglades-42366.herokuapp.com/createForm", {
         CategoryID,
         CategoryName,
         Name,
