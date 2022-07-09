@@ -12,7 +12,7 @@ export default props => {
         window.location ='/'
       };
 const Item = styled(Box)(({ theme }) => ({
-    
+  backgroundColor:'#867A3C',
     ...theme.typography.body2,
     padding: theme.spacing(1),
     textAlign: "center",
@@ -20,7 +20,7 @@ const Item = styled(Box)(({ theme }) => ({
   
   }));
   return (
-    <Menu>
+    <Menu  backgroundColor="#867A3C">
          <Item >
          <img src={logo}  width="100" height="auto"  alt="" />
             <br></br>

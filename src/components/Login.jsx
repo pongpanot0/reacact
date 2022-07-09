@@ -77,6 +77,8 @@ export default function Login() {
               label="Email Address"
               name="email"
               autoComplete="email"
+              style={{color:'#867A3C'}}
+              inputProps={{ style: { fontFamily: 'nunito',focused: '#867A3C'}}}
               autoFocus
               onChange={(e)=>{
                 setEmail(e.target.value)
@@ -91,6 +93,7 @@ export default function Login() {
               type="password"
               id="password"
               autoComplete="current-password"
+              style={{color:'#867A3C'}}
               onChange={(e)=>{
                 setPassword(e.target.value)
               }}
@@ -102,6 +105,7 @@ export default function Login() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
               onClick={login}
+              style={{backgroundColor:'#867A3C'}}
             >
               เข้าสู่ระบบ
             </Button>

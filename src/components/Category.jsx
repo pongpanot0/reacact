@@ -6,9 +6,10 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import axios, { Axios } from "axios";
 import Box from "@mui/material/Box";
-
+import Checkbox from "@mui/material/Checkbox";
 import Card from "@mui/material/Card";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
@@ -35,6 +36,7 @@ const style = {
 
 function Category(props) {
   const [open, setOpen] = React.useState(false);
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [CategoryID, SetCategoryID] = useState();
@@ -45,7 +47,6 @@ function Category(props) {
   const [Name, setName] = useState("");
   const [Tel, setTel] = useState("");
   const [Email, setEmail] = useState("");
-  const [Consent, setConsent] = useState("");
   const [ProductID, setProductID] = useState();
   const [date, setDate] = useState(new Date().toLocaleDateString("en-US"));
   const [Status, setStatus] = useState("");
@@ -66,7 +67,11 @@ function Category(props) {
   const handleChange2 = (event) => {
     setStatus(event.target.value);
   };
-
+  const [checked, setChecked] = React.useState(true);
+  const handleChange4 = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setChecked(event.target.checked);
+  };
+  const formRef = React.useRef();
   useEffect(() => {
     axios
       .get("https://whispering-everglades-42366.herokuapp.com/twoColectionJoin")
@@ -94,21 +99,26 @@ function Category(props) {
   const postData = (e) => {
     e.preventDefault();
     axios
-      .post("https://whispering-everglades-42366.herokuapp.com/createForm", {
+      .post("http://localhost:4000/createForm", {
         CategoryID,
         CategoryName,
         Name,
         Tel,
         Email,
-        Consent,
+        checked,
         ProductID,
         date,
         Status,
         Remark,
       })
-      .then((res) => window.location.reload())
+      .then((res) => {
+        window.location.reload();
+      })
       .catch((err) => console.log(err));
   };
+  const OnExit = (e) => {
+    window.location.reload();
+  }
   const getExcel = (e) => {
     e.preventDefault();
     axios({
@@ -139,27 +149,37 @@ function Category(props) {
 
   return (
     <React.Fragment>
-      <div>   <br></br>
+      <div>
+        {" "}
+        <br></br>
         <Box>
-          <Button onClick={handleOpen} variant="contained">
+          <Button
+            onClick={handleOpen}
+            variant="contained"
+            style={{ backgroundColor: "#867A3C" }}
+          >
             เพิ่มข้อมูล
           </Button>
-          <Button variant="contained" onClick={getExcel}>
+          <Button
+            variant="contained"
+            onClick={getExcel}
+            style={{ backgroundColor: "#867A3C", marginLeft: 5 }}
+          >
             Export Excel
           </Button>
           <br></br>
           <br></br>
           <FormGroup>
             <TextField
-              label="ค้นหาด้วยชื่อ"
+              label="ค้นหาด้วยเบอร์โทร"
               onChange={(e) => setSearchedVal(e.target.value)}
             />
-               <br></br>
+            <br></br>
             <TextField
               label="ค้นหาอีเมลล์"
               onChange={(e) => setSearchedVal2(e.target.value)}
             />
-    <br></br>
+            <br></br>
             <FormControl>
               <InputLabel id="demo-simple-select-label">สถานะงาน</InputLabel>
 
@@ -194,7 +214,9 @@ function Category(props) {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
+ 
         <Box sx={style}>
+        <form ref={formRef}>
           <Typography sx={{ textAlign: "center" }} variant="body1" gutterBottom>
             เพิ่มข้อมูลโครงการที่ลูกค้าสนใจ
           </Typography>
@@ -209,37 +231,47 @@ function Category(props) {
                 <TextField
                   type="text"
                   value={Name}
+                  required
                   onChange={(e) => setName(e.target.value)}
                 />
                 <label>เบอร์โทร</label>
                 <TextField
                   type="text"
                   value={Tel}
+                  required
                   onChange={(e) => setTel(e.target.value)}
                 />
                 <label>อีเมลล์</label>
                 <TextField
                   type="text"
                   value={Email}
+                  required
                   onChange={(e) => setEmail(e.target.value)}
-                />
-                <label>หมายเหตุ</label>
-                <TextField
-                  type="text"
-                  value={Consent}
-                  onChange={(e) => setConsent(e.target.value)}
                 />
               </Grid>
               <Grid item xs={6}>
                 <label>Remark</label>
                 <TextField
                   type="text"
+                  
                   value={Remark}
+                  required
                   onChange={(e) => setRemark(e.target.value)}
                 ></TextField>
               </Grid>
             </Grid>
-
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={checked}
+                  
+                  onChange={handleChange4}
+                  inputProps={{ "aria-label": "controlled" }}
+                />
+              }
+              label="ยินยอมให้เก็บข้อมูลส่วนบุคคล"
+            />
+            <br></br>
             <FormControl>
               <InputLabel id="demo-simple-select-1">ประเภทโครงการ</InputLabel>
               <Select
@@ -247,6 +279,7 @@ function Category(props) {
                 id="demo-simple-select"
                 value={CategoryID}
                 label="CategoryID"
+                required
                 onChange={handleCategoryID}
               >
                 {Cate.map((row) => (
@@ -254,13 +287,14 @@ function Category(props) {
                 ))}
               </Select>
             </FormControl>
-
+            <br></br>
             <FormControl>
               <InputLabel id="demo-simple-select-1">รหัสโครงการ</InputLabel>
               <Select
                 labelId="demo-simple-select-1"
                 id="demo-simple-1"
                 value={ProductID}
+                required
                 label="ProductID"
                 onChange={handleProduct}
               >
@@ -269,6 +303,7 @@ function Category(props) {
                 ))}
               </Select>
             </FormControl>
+            <br></br>
             <FormControl>
               <InputLabel id="demo-simple-select-label">สถานะงาน</InputLabel>
 
@@ -276,6 +311,7 @@ function Category(props) {
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={Status}
+                required
                 label="สถานะงาน"
                 onChange={handleChange2}
               >
@@ -292,11 +328,27 @@ function Category(props) {
                 <MenuItem value={"ปฏิเสธลูกค้า"}>ปฏิเสธลูกค้า</MenuItem>
               </Select>
             </FormControl>
-            <Button variant="contained" onClick={postData}>
-              submit
+            <br></br>
+            <Button
+              variant="contained"
+              onClick={OnExit}
+              style={{ backgroundColor: "#867A3C" }}
+            >
+              ยกเลิก
+            </Button>
+            <br></br>
+            <Button
+              variant="contained"
+              onClick={postData}
+              onClick={() => formRef.current.reportValidity()}
+              style={{ backgroundColor: "#867A3C" }}
+            >
+              เพิ่มข้อมูล
             </Button>
           </FormControl>
+          </form>
         </Box>
+     
       </Modal>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }}>
@@ -329,51 +381,52 @@ function Category(props) {
               (row) =>
                 // note that I've incorporated the searchedVal length check here
                 !searchedVal.length ||
-                row.Name.toString()
+                row.Tel.toString()
                   .toLowerCase()
                   .includes(searchedVal.toString().toLowerCase())
-            ).filter(
-              (row) =>
-                // note that I've incorporated the searchedVal length check here
-                !searchedVal2.length ||row.Email.toString()
-                  .toLowerCase()
-                  .includes(searchedVal2.toString().toLowerCase())
-                  ).
-                  filter(
-                    (row) =>
-                      // note that I've incorporated the searchedVal length check here
-                      !searchedVal3.length ||row.Status.toString()
-                        .toLowerCase()
-                        .includes(searchedVal3.toString().toLowerCase())
-                        ).map((row) => (
-                    <TableRow key={row.CategoryID}>
-                      <TableCell></TableCell>
-                      <TableCell>{row.det[0].CompanyID}</TableCell>
-                      <TableCell>{row.det[0].ProductID}</TableCell>
-                      <TableCell>{row.det[0].ProductName}</TableCell>
-                      <TableCell>{row.det[0].Adress}</TableCell>
-                      <TableCell>{row.det[0].Price}</TableCell>
-                      <TableCell>{row.det[0].sqm}</TableCell>
-                      <TableCell>{row.det[0].bedroom}</TableCell>
-                      <TableCell>{row.det[0].bathroom}</TableCell>
-                      <TableCell>{row.det[0].Parking}</TableCell>
-                      <TableCell>{row.date}</TableCell>
-                      <TableCell>{row.Name}</TableCell>
-                      <TableCell>{row.Tel}</TableCell>
-                      <TableCell>{row.Email}</TableCell>
-                      <TableCell>{row.Consent}</TableCell>
-                      <TableCell>{row.Status}</TableCell>
-                      <TableCell>{row.Remark}</TableCell>
-                      <TableCell>{row.update}</TableCell>
-                      <TableCell>
-                        <Button onClick={() => Update(row.id)}>Edit</Button>
-                        <Button onClick={() => DeleteData(row.id)}>
-                          Delete
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  )
-            )}
+            )
+              .filter(
+                (row) =>
+                  // note that I've incorporated the searchedVal length check here
+                  !searchedVal2.length ||
+                  row.Email.toString()
+                    .toLowerCase()
+                    .includes(searchedVal2.toString().toLowerCase())
+              )
+              .filter(
+                (row) =>
+                  // note that I've incorporated the searchedVal length check here
+                  !searchedVal3.length ||
+                  row.Status.toString()
+                    .toLowerCase()
+                    .includes(searchedVal3.toString().toLowerCase())
+              )
+              .map((row) => (
+                <TableRow key={row.CategoryID}>
+                  <TableCell></TableCell>
+                  <TableCell>{row.det[0].CompanyID}</TableCell>
+                  <TableCell>{row.det[0].ProductID}</TableCell>
+                  <TableCell>{row.det[0].ProductName}</TableCell>
+                  <TableCell>{row.det[0].Adress}</TableCell>
+                  <TableCell>{row.det[0].Price}</TableCell>
+                  <TableCell>{row.det[0].sqm}</TableCell>
+                  <TableCell>{row.det[0].bedroom}</TableCell>
+                  <TableCell>{row.det[0].bathroom}</TableCell>
+                  <TableCell>{row.det[0].Parking}</TableCell>
+                  <TableCell>{row.date}</TableCell>
+                  <TableCell>{row.Name}</TableCell>
+                  <TableCell>{row.Tel}</TableCell>
+                  <TableCell>{row.Email}</TableCell>
+                  <TableCell>{row.Consent}</TableCell>
+                  <TableCell>{row.Status}</TableCell>
+                  <TableCell>{row.Remark}</TableCell>
+                  <TableCell>{row.update}</TableCell>
+                  <TableCell>
+                    <Button onClick={() => Update(row.id)}>Edit</Button>
+                    <Button onClick={() => DeleteData(row.id)}>Delete</Button>
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>
