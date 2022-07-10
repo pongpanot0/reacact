@@ -10,7 +10,7 @@ function App() {
   return (
     
     <div >
-      <div style={{backgroundColor:'rgb(255, 253, 208)'}}>
+      <div style={{backgroundColor:' rgb(244, 242, 233)'}}>
       <Routes>
         <Route exact path="/" element={<Login />} />
       </Routes>
