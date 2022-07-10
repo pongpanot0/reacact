@@ -39,15 +39,15 @@ export default function Navbar() {
 
   return (
     <Box sx={{ flexGrow: 1 }} style={{ backgroundColor: "white" }}>
-      <Grid container spacing={2}>
+      <Grid container >
         <Grid item xs={2} >
           <Item style={{ background: "#13499f", color: "white" }}>
        
 <Sidebar/>
           </Item>
         </Grid>
-        <Grid item xs={10}>
-          <Item>
+        <Grid item xs={10} style={{paddingLeft:25}}>
+          <Item >
             <Category />
           </Item>
         </Grid>

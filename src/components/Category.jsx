@@ -32,6 +32,7 @@ const style = {
   border: "2px solid #000",
   boxShadow: 24,
   p: 4,
+  marginLeft:50
 };
 
 function Category(props) {
@@ -156,10 +157,10 @@ function Category(props) {
       <br></br>
       <br></br>
 
-      <div >
+      <div style={{marginLeft: 20 }}>
         {" "}
         <br></br>
-        <Box>
+        <Box  >
           <Button
             onClick={handleOpen}
             variant="contained"
@@ -360,7 +361,7 @@ function Category(props) {
         </Box>
      
       </Modal>
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} >
         <Table sx={{ minWidth: 650 }}>
           <TableHead>
             <TableRow>
