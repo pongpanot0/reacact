@@ -7,10 +7,10 @@ import Category from "./Category";
 import Sidebar from "./sidebar";
 
 const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+
   ...theme.typography.body2,
   textAlign: "center",
-  color: theme.palette.text.secondary,
+
 
 }));
 const gridContainer = {
@@ -38,7 +38,7 @@ export default function Navbar() {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }} >
+    <Box sx={{ flexGrow: 1 }} style={{ backgroundColor: "white" }}>
       <Grid container spacing={2}>
         <Grid item xs={2} >
           <Item style={{ background: "#13499f", color: "white" }}>

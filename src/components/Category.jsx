@@ -156,7 +156,7 @@ function Category(props) {
       <br></br>
       <br></br>
 
-      <div>
+      <div >
         {" "}
         <br></br>
         <Box>

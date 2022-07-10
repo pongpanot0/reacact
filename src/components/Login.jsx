@@ -51,16 +51,16 @@ export default function Login() {
   };
 
   return (
-    <div style={{backgroundColor:'#FFFDD0',height:'100%'}}>
+    <div style={{backgroundColor:'rgb(244, 242, 233);'}}>
   
-      <Container component="main"  style={{backgroundColor:'#FFFDD0',height:1000}}>
-        <CssBaseline  style={{backgroundColor:'#FFFDD0'}} />
+      <Container component="main"  style={{backgroundColor:' rgb(244, 242, 233);',height:1000}}>
+        <CssBaseline  style={{backgroundColor:' rgb(244, 242, 233);'}} />
         <Box
           sx={{
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            backgroundColor:'#FFFDD0'
+            backgroundColor:' rgb(244, 242, 233);'
           }}
         >
       
@@ -69,7 +69,7 @@ export default function Login() {
           <Typography component="h1" variant="h5">
             ระบบจัดการข้อมูล
           </Typography>
-          <Box  style={{backgroundColor:'#FFFDD0'}} component="form" onSubmit={handleSubmit} noValidate >
+          <Box  style={{backgroundColor:' rgb(244, 242, 233);'}} component="form" onSubmit={handleSubmit} noValidate >
             <TextField
               margin="normal"
               required
