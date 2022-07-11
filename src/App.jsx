@@ -9,7 +9,7 @@ import Sidebar from "./components/sidebar";
 function App() {
   return (
     
-    <div >
+    <div style={{backgroundColor:' rgb(244, 242, 233)'}} >
       <div style={{backgroundColor:' rgb(244, 242, 233)'}}>
       <Routes>
         <Route exact path="/" element={<Login />} />

@@ -46,7 +46,7 @@ export default function Navbar() {
 <Sidebar/>
           </Item>
         </Grid>
-        <Grid item xs={10} style={{paddingLeft:25}}>
+        <Grid item xs={9} style={{paddingLeft:50}}>
           <Item >
             <Category />
           </Item>

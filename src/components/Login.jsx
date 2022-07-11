@@ -53,14 +53,16 @@ export default function Login() {
   return (
     <div style={{backgroundColor:'rgb(244, 242, 233);'}}>
   
-      <Container component="main"  style={{backgroundColor:' rgb(244, 242, 233);',height:1000}}>
+      <Container component="main"  style={{backgroundColor:' rgb(244, 242, 233);'}}>
         <CssBaseline  style={{backgroundColor:' rgb(244, 242, 233);'}} />
         <Box
           sx={{
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            backgroundColor:' rgb(244, 242, 233);'
+            backgroundColor:' rgb(244, 242, 233);',
+            paddingTop:20,
+           height:1200
           }}
         >
       

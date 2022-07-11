@@ -224,11 +224,11 @@ function UpdateForm(id) {
           </Select>
         </FormControl>
         <br></br>
-        <Button variant="contained" onClick={Home}>
+        <Button   style={{ backgroundColor: "#867A3C" }} variant="contained" onClick={Home}>
           ยกเลิก
         </Button>
         <br></br>
-        <Button variant="contained" onClick={postData}>
+        <Button  style={{ backgroundColor: "#867A3C" }} variant="contained" onClick={postData}>
           อัพเดท
         </Button>
       </FormControl>
