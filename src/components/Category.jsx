@@ -32,7 +32,7 @@ const style = {
   border: "2px solid #000",
   boxShadow: 24,
   p: 4,
-  marginLeft:50
+
 };
 
 function Category(props) {
@@ -55,6 +55,7 @@ function Category(props) {
   const [searchedVal, setSearchedVal] = useState("");
   const [searchedVal2, setSearchedVal2] = useState("");
   const [searchedVal3, setSearchedVal3] = useState("");
+  const [det, setDet] = useState("");
   const handleChange = (event) => {
     setSearchedVal3(event.target.value);
   };
@@ -79,6 +80,7 @@ function Category(props) {
       .then((res) => {
         console.log(res.data);
         setCategoryList(res.data);
+        setDet(res.data)
       })
       .catch((err) => console.log(err));
     axios
@@ -98,8 +100,11 @@ function Category(props) {
       .catch((err) => console.log(err));
   }, []);
   const postData = (e) => {
-    axios
-      .post("https://whispering-everglades-42366.herokuapp.com/createForm", {
+    if(CategoryID == undefined){
+       console.log('err')
+    }
+    if(CategoryID !== undefined){
+      return axios.post("https://whispering-everglades-42366.herokuapp.com/createForm", {
         CategoryID,
         CategoryName,
         Name,
@@ -110,11 +115,18 @@ function Category(props) {
         date,
         Status,
         Remark,
+        
       })
-      .then((res) => {
-        window.location.reload();
-      })
-      .catch((err) => console.log(err));
+        .then((res) => {
+          window.location.reload();
+        })
+    
+    }
+
+    
+      
+    
+    
   };
   const OnExit = (e) => {
     window.location.reload();
@@ -139,8 +151,14 @@ function Category(props) {
     window.location = "/edit/" + id;
   }
   const click = (e) =>{
-    formRef.current.reportValidity()
-    postData()
+    if(CategoryID == null){
+      formRef.current.reportValidity()
+    }
+    if(CategoryID !== null){
+      postData()
+    }
+
+
 
   }
   const DeleteData = (id) => {
@@ -157,7 +175,7 @@ function Category(props) {
       <br></br>
       <br></br>
 
-      <div style={{marginLeft: 20 }}>
+      <div style={{marginLeft: 20}}>
         {" "}
         <br></br>
         <Box  >
@@ -223,7 +241,7 @@ function Category(props) {
         aria-describedby="modal-modal-description"
       >
  
-        <Box sx={style}>
+        <Box sx={style} >
         <form ref={formRef}>
           <Typography sx={{ textAlign: "center" }} variant="body1" gutterBottom>
             เพิ่มข้อมูลโครงการที่ลูกค้าสนใจ
@@ -362,7 +380,7 @@ function Category(props) {
      
       </Modal>
       <TableContainer component={Paper} >
-        <Table sx={{ minWidth: 650 }}>
+        <Table sx={{ minWidth: 650 }} >
           <TableHead>
             <TableRow>
               <TableCell></TableCell>
@@ -415,6 +433,7 @@ function Category(props) {
               .map((row) => (
                 <TableRow key={row.CategoryID}>
                   <TableCell></TableCell>
+          
                   <TableCell>{row.det[0].CompanyID}</TableCell>
                   <TableCell>{row.det[0].ProductID}</TableCell>
                   <TableCell>{row.det[0].ProductName}</TableCell>
